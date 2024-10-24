@@ -1,0 +1,49 @@
+package br.com.aiko.converte;
+
+import java.util.List;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
+import br.com.aiko.modelo.Professor;
+
+
+public class ProfessorConverte implements Converter{
+	
+	private List<Professor> listaProfessor;
+	
+	public ProfessorConverte(List<Professor> listaProfessor){
+		this.listaProfessor = listaProfessor;
+	}
+
+	@Override
+	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+		
+		if (value == null || value.isEmpty() || !value.matches("\\d+")){
+		return null;
+		} 
+		try{
+			int id = Integer.valueOf(value);
+			for (Professor professor: listaProfessor){
+				if (id ==professor.getId()){
+					return professor;
+				}
+			}
+			
+		}catch(Exception e){}
+		return null;
+		
+	}
+
+	@Override
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		if (value == null){
+			return null;
+		}
+		Professor professor = (Professor) value;
+		
+		return Integer.toString(professor.getId());
+	}
+
+}
